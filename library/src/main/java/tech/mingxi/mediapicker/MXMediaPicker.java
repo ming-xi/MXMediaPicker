@@ -344,6 +344,7 @@ public class MXMediaPicker {
 				throw new IllegalArgumentException("cannot use camera in multi-selection mode");
 			}
 			it.putExtra(MediaPickerActivity.KEY_FOLDER_MODE, pickerConfig.getFolderMode());
+			it.putExtra(MediaPickerActivity.KEY_FILE_TYPE, pickerConfig.getFileType());
 			it.putExtra(MediaPickerActivity.KEY_MULTI_SELECT, pickerConfig.isMultiSelect());
 			it.putExtra(MediaPickerActivity.KEY_IS_CAMERA_ENABLED, pickerConfig.isAllowCamera());
 			it.putExtra(MediaPickerActivity.KEY_MULTI_SELECT_MAX_COUNT, pickerConfig.getMultiSelectMaxCount());

@@ -3,7 +3,6 @@ package tech.mingxi.mediapicker;
 import android.Manifest;
 import android.content.Intent;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.CheckBox;
@@ -66,19 +65,10 @@ public class MainActivity extends AppCompatActivity {
 			@Override
 			public void onClick(View v) {
 				String[] permissions = null;
-				if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-					if (cb_camera.isChecked()) {
-						permissions = new String[]{Manifest.permission.CAMERA};
-					} else {
-						goToPicker();
-						return;
-					}
+				if (cb_camera.isChecked()) {
+					permissions = new String[]{Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.CAMERA};
 				} else {
-					if (cb_camera.isChecked()) {
-						permissions = new String[]{Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.CAMERA};
-					} else {
-						permissions = new String[]{Manifest.permission.READ_EXTERNAL_STORAGE};
-					}
+					permissions = new String[]{Manifest.permission.READ_EXTERNAL_STORAGE};
 				}
 				requestPermissions(permissions);
 			}

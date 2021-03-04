@@ -37,6 +37,7 @@ public class MediaPickerActivity extends AppCompatActivity {
 	private static final String TAG = MediaPickerActivity.class.getSimpleName();
 	private static final int REQ_CODE_CAMERA = 1;
 	public static final String KEY_FOLDER_MODE = "KEY_FOLDER_MODE";
+	public static final String KEY_FILE_TYPE = "KEY_FILE_TYPE";
 	public static final String KEY_MULTI_SELECT = "KEY_MULTI_SELECT";
 	public static final String KEY_IS_CAMERA_ENABLED = "KEY_IS_CAMERA_ENABLED";
 	public static final String KEY_MULTI_SELECT_MAX_COUNT = "KEY_MULTI_SELECT_MAX_COUNT";
@@ -44,6 +45,7 @@ public class MediaPickerActivity extends AppCompatActivity {
 	private View progressBar;
 
 	private int mode = MXMediaPicker.FOLDER_MODE_ONLY_PARENT;
+	private int fileType = MXMediaPicker.FILE_TYPE_VIDEO_AND_IMAGE;
 	private boolean isMultiSelect = false;
 	private boolean isCameraEnabled = false;
 	private int multiSelectMaxCount = MXMediaPicker.DEFAULT_MULTI_SELECT_MAX;
@@ -52,7 +54,7 @@ public class MediaPickerActivity extends AppCompatActivity {
 	private Stack<FolderItem> stack = new Stack<>();
 	private List<Item> selectedItems = new ArrayList<>();
 	private FolderItem root;
-	private Uri photoUri;
+	private Uri fileUri;
 
 	@Override
 	protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -63,6 +65,7 @@ public class MediaPickerActivity extends AppCompatActivity {
 		progressBar = findViewById(R.id.mxmp_activity_picker_progressbar);
 		Intent it = getIntent();
 		mode = it.getIntExtra(KEY_FOLDER_MODE, mode);
+		fileType = it.getIntExtra(KEY_FILE_TYPE, fileType);
 		isMultiSelect = it.getBooleanExtra(KEY_MULTI_SELECT, isMultiSelect);
 		isCameraEnabled = it.getBooleanExtra(KEY_IS_CAMERA_ENABLED, isCameraEnabled);
 		multiSelectMaxCount = it.getIntExtra(KEY_MULTI_SELECT_MAX_COUNT, multiSelectMaxCount);
@@ -175,28 +178,47 @@ public class MediaPickerActivity extends AppCompatActivity {
 	}
 
 
-	private void goToCamera() {
-		Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+	private void goToVideoRecorder() {
+		Intent takePictureIntent = new Intent(MediaStore.ACTION_VIDEO_CAPTURE);
 		// Create the File where the photo should go
-		File photoFile = null;
+		File file = null;
 		try {
-			photoFile = createImageFile();
+			file = createVideoFile();
 		} catch (IOException ex) {
 			// Error occurred while creating the File
 			Toast.makeText(MediaPickerActivity.this, getResources().getString(R.string.start_camera_failed), Toast.LENGTH_LONG).show();
 		}
 		// Continue only if the File was successfully created
-		if (photoFile != null) {
-			photoUri = FileProvider.getUriForFile(this,
+		if (file != null) {
+			fileUri = FileProvider.getUriForFile(this,
 					"tech.mingxi.mediapicker.fileprovider",
-					photoFile);
-			takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoUri);
+					file);
+			takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, fileUri);
+			startActivityForResult(takePictureIntent, REQ_CODE_CAMERA);
+		}
+	}
+
+	private void goToCamera() {
+		Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+		// Create the File where the photo should go
+		File file = null;
+		try {
+			file = createImageFile();
+		} catch (IOException ex) {
+			// Error occurred while creating the File
+			Toast.makeText(MediaPickerActivity.this, getResources().getString(R.string.start_camera_failed), Toast.LENGTH_LONG).show();
+		}
+		// Continue only if the File was successfully created
+		if (file != null) {
+			fileUri = FileProvider.getUriForFile(this,
+					"tech.mingxi.mediapicker.fileprovider",
+					file);
+			takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, fileUri);
 			startActivityForResult(takePictureIntent, REQ_CODE_CAMERA);
 		}
 	}
 
 	private File createImageFile() throws IOException {
-		// Create an image file name
 		String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
 		String imageFileName = "JPEG_" + timeStamp + "_";
 		File storageDir = getFilesDir();
@@ -209,12 +231,25 @@ public class MediaPickerActivity extends AppCompatActivity {
 		return image;
 	}
 
+	private File createVideoFile() throws IOException {
+		String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+		String imageFileName = "MP4" + timeStamp + "_";
+		File storageDir = getFilesDir();
+		File image = File.createTempFile(
+				imageFileName,  /* prefix */
+				".mp4",         /* suffix */
+				storageDir      /* directory */
+		);
+		// Save a file: path for use with ACTION_VIEW intents
+		return image;
+	}
+
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
 		super.onActivityResult(requestCode, resultCode, data);
 		if (requestCode == REQ_CODE_CAMERA && resultCode == RESULT_OK) {
 			ImageItem imageItem = new ImageItem();
-			imageItem.setUri(photoUri.toString());
+			imageItem.setUri(fileUri.toString());
 			selectedItems.add(imageItem);
 			setResultAndFinish();
 		}
@@ -251,7 +286,11 @@ public class MediaPickerActivity extends AppCompatActivity {
 	public boolean onOptionsItemSelected(MenuItem item) {
 		int itemId = item.getItemId();
 		if (itemId == R.id.menu_picker_camera) {
-			goToCamera();
+			if (fileType == MXMediaPicker.FILE_TYPE_VIDEO) {
+				goToVideoRecorder();
+			} else {
+				goToCamera();
+			}
 			return true;
 		} else if (itemId == R.id.menu_picker_done) {
 			setResultAndFinish();
