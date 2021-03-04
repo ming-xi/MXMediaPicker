@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+	<string name = "root">root</string>
+	<string name = "load_data_error">Error…</string>
+	<string name = "reach_selection_max">Too many selected items(Max is %d)</string>
+	<string name = "menu_camera">Camera</string>
+	<string name = "menu_done">Done</string>
+	<string name = "start_camera_failed">Failed to start camera app</string>
+</resources>

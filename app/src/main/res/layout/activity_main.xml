@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android = "http://schemas.android.com/apk/res/android"
+	xmlns:app = "http://schemas.android.com/apk/res-auto"
+	xmlns:tools = "http://schemas.android.com/tools"
+	android:layout_width = "match_parent"
+	android:layout_height = "match_parent"
+	tools:context = ".MainActivity">
+
+	<ScrollView
+		android:layout_width = "0dp"
+		android:layout_height = "0dp"
+		android:layout_marginBottom = "8dp"
+		android:background = "#12000000"
+		android:fillViewport = "true"
+		app:layout_constraintBottom_toTopOf = "@id/activity_main_image"
+		app:layout_constraintEnd_toEndOf = "parent"
+		app:layout_constraintStart_toStartOf = "parent"
+		app:layout_constraintTop_toTopOf = "parent">
+
+		<TextView
+			android:id = "@+id/activity_main_text"
+			android:layout_width = "match_parent"
+			android:layout_height = "wrap_content"
+			android:textSize = "12sp" />
+	</ScrollView>
+
+	<ImageView
+		android:id = "@+id/activity_main_image"
+		android:layout_width = "120dp"
+		android:layout_height = "0dp"
+		android:layout_marginBottom = "8dp"
+		app:layout_constraintBottom_toTopOf = "@id/activity_main_camera"
+		app:layout_constraintDimensionRatio = "1"
+		app:layout_constraintEnd_toEndOf = "parent"
+		app:layout_constraintStart_toStartOf = "parent" />
+
+	<CheckBox
+		android:id = "@+id/activity_main_camera"
+		android:layout_width = "wrap_content"
+		android:layout_height = "wrap_content"
+		android:layout_marginStart = "16dp"
+		android:text = "@string/allow_camera"
+		app:layout_constraintBottom_toTopOf = "@id/activity_main_file_type_group"
+		app:layout_constraintStart_toStartOf = "parent" />
+
+	<CheckBox
+		android:id = "@+id/activity_main_multi_select"
+		android:layout_width = "wrap_content"
+		android:layout_height = "wrap_content"
+		android:layout_marginStart = "16dp"
+		android:text = "@string/multi_select"
+		app:layout_constraintStart_toEndOf = "@id/activity_main_camera"
+		app:layout_constraintTop_toTopOf = "@id/activity_main_camera" />
+
+	<com.google.android.material.textfield.TextInputLayout
+		android:id = "@+id/activity_main_max"
+		style = "@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+		android:layout_width = "0dp"
+		android:layout_height = "wrap_content"
+		android:layout_marginStart = "16dp"
+		android:layout_marginEnd = "16dp"
+		android:enabled = "false"
+		android:hint = "@string/multi_select_max_count"
+		app:layout_constraintBottom_toBottomOf = "@id/activity_main_camera"
+		app:layout_constraintEnd_toEndOf = "parent"
+		app:layout_constraintStart_toEndOf = "@id/activity_main_multi_select"
+		app:layout_constraintTop_toTopOf = "@id/activity_main_camera">
+
+		<com.google.android.material.textfield.TextInputEditText
+			android:layout_width = "match_parent"
+			android:layout_height = "wrap_content"
+			android:inputType = "number" />
+	</com.google.android.material.textfield.TextInputLayout>
+
+	<RadioGroup
+		android:id = "@+id/activity_main_file_type_group"
+		android:layout_width = "wrap_content"
+		android:layout_height = "wrap_content"
+		android:layout_marginStart = "16dp"
+		android:orientation = "vertical"
+		app:layout_constraintBottom_toTopOf = "@id/activity_main_button"
+		app:layout_constraintStart_toStartOf = "parent">
+
+		<RadioButton
+			android:id = "@+id/activity_main_file_type_all"
+			android:layout_width = "wrap_content"
+			android:layout_height = "wrap_content"
+			android:checked = "true"
+			android:text = "@string/file_type_all" />
+
+		<RadioButton
+			android:id = "@+id/activity_main_file_type_image"
+			android:layout_width = "wrap_content"
+			android:layout_height = "wrap_content"
+			android:checked = "false"
+			android:text = "@string/file_type_image" />
+
+		<RadioButton
+			android:id = "@+id/activity_main_file_type_video"
+			android:layout_width = "wrap_content"
+			android:layout_height = "wrap_content"
+			android:checked = "false"
+			android:text = "@string/file_type_video" />
+	</RadioGroup>
+
+	<Button
+		android:id = "@+id/activity_main_button"
+		android:layout_width = "wrap_content"
+		android:layout_height = "wrap_content"
+		android:layout_marginBottom = "24dp"
+		android:text = "@string/start"
+		app:layout_constraintBottom_toBottomOf = "parent"
+		app:layout_constraintLeft_toLeftOf = "parent"
+		app:layout_constraintRight_toRightOf = "parent" />
+</androidx.constraintlayout.widget.ConstraintLayout>

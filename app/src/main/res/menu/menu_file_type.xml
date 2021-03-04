@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android = "http://schemas.android.com/apk/res/android"
+	xmlns:app = "http://schemas.android.com/apk/res-auto">
+	<item
+		android:id = "@+id/menu_file_type_all"
+		android:enabled = "true"
+		android:title = "@string/file_type_all"
+		app:showAsAction = "always" />
+	<item
+		android:id = "@+id/menu_file_type_image"
+		android:enabled = "true"
+		android:title = "@string/file_type_image"
+		app:showAsAction = "always" />
+	<item
+		android:id = "@+id/menu_file_type_video"
+		android:enabled = "true"
+		android:title = "@string/file_type_video"
+		app:showAsAction = "always" />
+</menu>

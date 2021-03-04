@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+	<color name = "MXColorPrimary">#3d405b</color>
+	<color name = "MXColorPrimaryVariant">@color/black</color>
+	<color name = "MXColorOnPrimary">#f4f1de</color>
+	<color name = "MXColorSecondary">#e07a5f</color>
+	<color name = "MXColorSecondaryVariant">#9B5542</color>
+	<color name = "MXColorOnSecondary">#81b29a</color>
+</resources>

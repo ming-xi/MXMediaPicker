@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android = "http://schemas.android.com/apk/res/android"
+	xmlns:app = "http://schemas.android.com/apk/res-auto"
+	android:layout_width = "match_parent"
+	android:layout_height = "wrap_content">
+
+	<ImageView
+		android:id = "@+id/mxmp_item_folder_preview1"
+		android:layout_width = "0dp"
+		android:layout_height = "0dp"
+		android:layout_marginStart = "1px"
+		android:layout_marginTop = "1px"
+		android:layout_marginEnd = "0.5dp"
+		android:layout_marginBottom = "0.5dp"
+		android:scaleType = "centerCrop"
+		app:layout_constraintBottom_toTopOf = "@id/mxmp_item_folder_preview3"
+		app:layout_constraintDimensionRatio = "1"
+		app:layout_constraintEnd_toStartOf = "@id/mxmp_item_folder_preview2"
+		app:layout_constraintStart_toStartOf = "parent"
+		app:layout_constraintTop_toTopOf = "parent" />
+
+	<ImageView
+		android:id = "@+id/mxmp_item_folder_preview2"
+		android:layout_width = "0dp"
+		android:layout_height = "0dp"
+		android:layout_marginStart = "0.5dp"
+		android:layout_marginEnd = "1px"
+		android:layout_marginTop = "1px"
+		android:layout_marginBottom = "0.5dp"
+		android:scaleType = "centerCrop"
+		app:layout_constraintBottom_toTopOf = "@id/mxmp_item_folder_preview4"
+		app:layout_constraintDimensionRatio = "1"
+		app:layout_constraintEnd_toEndOf = "parent"
+		app:layout_constraintStart_toEndOf = "@id/mxmp_item_folder_preview1"
+		app:layout_constraintTop_toTopOf = "parent" />
+
+	<ImageView
+		android:id = "@+id/mxmp_item_folder_preview3"
+		android:layout_width = "0dp"
+		android:layout_height = "0dp"
+		android:layout_marginStart = "1px"
+		android:layout_marginTop = "0.5dp"
+		android:layout_marginEnd = "0.5dp"
+		android:layout_marginBottom = "1px"
+		android:scaleType = "centerCrop"
+		app:layout_constraintBottom_toBottomOf = "parent"
+		app:layout_constraintDimensionRatio = "1"
+		app:layout_constraintEnd_toStartOf = "@id/mxmp_item_folder_preview4"
+		app:layout_constraintStart_toStartOf = "parent"
+		app:layout_constraintTop_toBottomOf = "@id/mxmp_item_folder_preview1" />
+
+	<ImageView
+		android:id = "@+id/mxmp_item_folder_preview4"
+		android:layout_width = "0dp"
+		android:layout_height = "0dp"
+		android:layout_marginStart = "0.5dp"
+		android:layout_marginEnd = "1px"
+		android:layout_marginTop = "0.5dp"
+		android:layout_marginBottom = "1px"
+		android:scaleType = "centerCrop"
+		app:layout_constraintBottom_toBottomOf = "parent"
+		app:layout_constraintDimensionRatio = "1"
+		app:layout_constraintEnd_toEndOf = "parent"
+		app:layout_constraintStart_toEndOf = "@id/mxmp_item_folder_preview3"
+		app:layout_constraintTop_toBottomOf = "@id/mxmp_item_folder_preview2" />
+
+	<TextView
+		android:id = "@+id/mxmp_item_folder_title"
+		android:layout_width = "0dp"
+		android:layout_height = "0dp"
+		android:background = "#BF000000"
+		android:gravity = "center"
+		android:padding = "16dp"
+		android:text = "Name"
+		android:textColor = "@color/white"
+		app:layout_constraintBottom_toBottomOf = "@id/mxmp_item_folder_preview3"
+		app:layout_constraintEnd_toEndOf = "@id/mxmp_item_folder_preview2"
+		app:layout_constraintStart_toStartOf = "@id/mxmp_item_folder_preview1"
+		app:layout_constraintTop_toTopOf = "@id/mxmp_item_folder_preview1" />
+</androidx.constraintlayout.widget.ConstraintLayout>

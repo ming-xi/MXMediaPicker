@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android = "http://schemas.android.com/apk/res/android"
+	xmlns:app = "http://schemas.android.com/apk/res-auto">
+	<item
+		android:id = "@+id/menu_picker_camera"
+		android:enabled = "true"
+		android:icon = "@drawable/ic_camera"
+		android:title = "@string/menu_camera"
+		app:showAsAction = "always" />
+	<item
+		android:id = "@+id/menu_picker_done"
+		android:enabled = "true"
+		android:icon = "@drawable/ic_done"
+		android:title = "@string/menu_done"
+		app:showAsAction = "always" />
+</menu>

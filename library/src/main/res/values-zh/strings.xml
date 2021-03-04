@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+	<string name = "root">根目录</string>
+	<string name = "load_data_error">出错了…</string>
+	<string name = "reach_selection_max">最多只能选择%d个文件</string>
+	<string name = "menu_camera">拍照</string>
+	<string name = "menu_done">完成</string>
+	<string name = "start_camera_failed">调用拍照APP失败</string>
+</resources>

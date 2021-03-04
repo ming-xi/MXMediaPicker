@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+	<string name = "app_name">媒体选择器Demo</string>
+	<string name = "allow_camera">开启拍照选项</string>
+	<string name = "multi_select">开启多选</string>
+	<string name = "file_type_all">图片和视频</string>
+	<string name = "file_type_image">仅限图片</string>
+	<string name = "file_type_video">仅限视频</string>
+	<string name = "multi_select_max_count">多选上限</string>
+	<string name = "start">开始</string>
+</resources>
