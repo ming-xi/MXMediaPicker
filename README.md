@@ -1,4 +1,5 @@
 # MXMediaPicker
+[![](https://jitpack.io/v/ming-xi/MXMediaPicker.svg)](https://jitpack.io/#ming-xi/MXMediaPicker)
 
 A media picker for Android (supports Android 11) with fully customizable UI~
 ### Try Demo
