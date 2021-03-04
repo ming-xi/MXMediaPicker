@@ -19,7 +19,7 @@ Step 1. Add it in your root build.gradle at the end of repositories:
 Step 2. Add the dependency
 
 	dependencies {
-		implementation 'com.github.ming-xi:MXMediaPicker:1.0.0'
+		implementation 'com.github.ming-xi:MXMediaPicker:1.0.2'
 	}
 
 
@@ -81,4 +81,4 @@ See also the list of [contributors](https://github.com/ming-xi/MXMediaPicker/con
 
 ## License
 
-This project is licensed under the Anti 996 License - see the [LICENSE.md](LICENSE) file for details
+This project is licensed under the Anti 996 License - see the [LICENSE](LICENSE) file for details
