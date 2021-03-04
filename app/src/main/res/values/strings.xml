@@ -2,6 +2,7 @@
 	<string name = "app_name">MediaPicker Demo</string>
 	<string name = "allow_camera">allow camera</string>
 	<string name = "multi_select">multi-select</string>
+	<string name = "full_path">full path mode</string>
 	<string name = "file_type_all">videos and images</string>
 	<string name = "file_type_image">only images</string>
 	<string name = "file_type_video">only videos</string>

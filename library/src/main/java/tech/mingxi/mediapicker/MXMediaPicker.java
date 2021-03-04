@@ -57,7 +57,6 @@ public class MXMediaPicker {
 	private PickerConfig pickerConfig;
 	private final ExecutorService executorService;
 
-
 	private static class Singleton {
 		static MXMediaPicker INSTANCE;
 
@@ -144,45 +143,113 @@ public class MXMediaPicker {
 			}
 			itemsInFolder.add(item);
 		}
-		Set<Map.Entry<String, List<Item>>> entries = map.entrySet();
-		for (Map.Entry<String, List<Item>> entry : entries) {
-			List<Item> itemList = entry.getValue();
-			if (itemList.isEmpty()) {
-				continue;
-			}
-			String path = entry.getKey();
-			path = nameMap.get(path);
-			Log.i(TAG, "folder = " + path);
-			FolderItem folderItem = new FolderItem();
-			folderItem.setPath(path);
-			String name = path;
-			if (name.contains("/") && !name.endsWith("/")) {
-				name = name.substring(name.lastIndexOf("/") + 1);
-			}
-			folderItem.setName(name);
-			Collections.sort(itemList, new Comparator<Item>() {
-				@Override
-				public int compare(Item o1, Item o2) {
-					return Long.compare(o2.getDate(), o1.getDate());
+		int mode = pickerConfig.getFolderMode();
+		if (mode == FOLDER_MODE_FULL_PATH) {
+			HashMap<String, FolderItem> folderMap = new HashMap<>();
+			Set<Map.Entry<String, List<Item>>> entries = map.entrySet();
+			FolderItem folderItem = null;
+			FolderItem lastFolderItem = null;
+			for (Map.Entry<String, List<Item>> entry : entries) {
+				List<Item> itemList = entry.getValue();
+				if (itemList.isEmpty()) {
+					continue;
 				}
-			});
-			folderItem.setDate(itemList.get(0).getDate());
-			folderItem.setItems(itemList);
-			String folderPath = path;
-			if (folderPath.contains("/")) {
-				folderPath = folderPath.substring(0, folderPath.lastIndexOf("/"));
-			} else {
-				folderPath = appContext.getResources().getString(R.string.root);
+				String path = entry.getKey();
+				path = nameMap.get(path);
+				Log.i(TAG, "folder = " + path);
+				String[] segments = path.split("/", 0);
+
+				String currentPath = path;
+				folderItem = null;
+				lastFolderItem = null;
+				for (int i = segments.length - 1; i >= 0; i--) {
+					String segment = segments[i];
+					if (segment.trim().isEmpty()) {
+						continue;
+					}
+					folderItem = folderMap.get(currentPath);
+					if (folderItem == null) {
+						folderItem = new FolderItem();
+						folderItem.setPath(currentPath);
+						folderItem.setName(segment);
+						folderItem.setFolderPath(getFolderPathFromPath(currentPath));
+						folderItem.setItems(new ArrayList<>());
+						folderMap.put(currentPath, folderItem);
+					}
+					currentPath = currentPath.replace(segment, "");
+					if (currentPath.endsWith("/")) {
+						currentPath = currentPath.substring(0, currentPath.length() - 1);
+					}
+					if (i == segments.length - 1) {
+						folderItem.getItems().addAll(entry.getValue());
+					} else {
+						if (!folderItem.getItems().contains(lastFolderItem)) {
+							folderItem.getItems().add(lastFolderItem);
+						}
+					}
+					lastFolderItem = folderItem;
+				}
+				Log.i(TAG, String.format("items name= %s size = %d", folderItem.getName(), folderItem.getItems().size()));
 			}
-			folderItem.setFolderPath(folderPath);
-			items.add(folderItem);
+			while (folderItem.getItems().size() == 1 && folderItem.getItems().get(0) instanceof FolderItem) {
+				folderItem = (FolderItem) folderItem.getItems().get(0);
+			}
+			items.addAll(folderItem.getItems());
+			sortByDate(items);
+		} else if (mode == FOLDER_MODE_ONLY_PARENT) {
+			Set<Map.Entry<String, List<Item>>> entries = map.entrySet();
+			for (Map.Entry<String, List<Item>> entry : entries) {
+				List<Item> itemList = entry.getValue();
+				if (itemList.isEmpty()) {
+					continue;
+				}
+				String path = entry.getKey();
+				path = nameMap.get(path);
+				Log.i(TAG, "folder = " + path);
+				FolderItem folderItem = new FolderItem();
+				folderItem.setPath(path);
+				String name = path;
+				if (name.contains("/") && !name.endsWith("/")) {
+					name = name.substring(name.lastIndexOf("/") + 1);
+				}
+				folderItem.setName(name);
+				sortByDate(itemList);
+				folderItem.setDate(itemList.get(0).getDate());
+				folderItem.setItems(itemList);
+				folderItem.setFolderPath(getFolderPathFromPath(path));
+				items.add(folderItem);
+			}
+			sortByDate(items);
 		}
-		Collections.sort(items, new Comparator<Item>() {
+	}
+
+	private void sortByDate(List<Item> itemList) {
+		for (Item item : itemList) {
+			if (item instanceof FolderItem) {
+				Log.i(TAG, "sortByDate  " + ((FolderItem) item).getPath());
+				sortByDate(((FolderItem) item).getItems());
+				((FolderItem) item).setDate(((FolderItem) item).getItems().get(0).getDate());
+			}
+		}
+		Collections.sort(itemList, new Comparator<Item>() {
 			@Override
 			public int compare(Item o1, Item o2) {
-				return Long.compare(o2.getDate(), o1.getDate());
+				if (o1 instanceof FolderItem ^ o2 instanceof FolderItem) {
+					return (o1 instanceof FolderItem && !(o2 instanceof FolderItem)) ? -1 : 1;
+				} else {
+					return Long.compare(o2.getDate(), o1.getDate());
+				}
 			}
 		});
+	}
+
+	private String getFolderPathFromPath(String folderPath) {
+		if (folderPath.contains("/")) {
+			folderPath = folderPath.substring(0, folderPath.lastIndexOf("/"));
+		} else {
+			folderPath = appContext.getResources().getString(R.string.root);
+		}
+		return folderPath;
 	}
 
 	private void loadVideoData(List<Item> list) {

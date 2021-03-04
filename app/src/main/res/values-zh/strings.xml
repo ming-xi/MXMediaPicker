@@ -3,6 +3,7 @@
 	<string name = "app_name">媒体选择器Demo</string>
 	<string name = "allow_camera">开启拍照选项</string>
 	<string name = "multi_select">开启多选</string>
+	<string name = "full_path">完整路径模式</string>
 	<string name = "file_type_all">图片和视频</string>
 	<string name = "file_type_image">仅限图片</string>
 	<string name = "file_type_video">仅限视频</string>

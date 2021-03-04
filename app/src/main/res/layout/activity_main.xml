@@ -9,7 +9,7 @@
 	<ScrollView
 		android:layout_width = "0dp"
 		android:layout_height = "0dp"
-		android:layout_marginBottom = "8dp"
+		android:layout_marginBottom = "16dp"
 		android:background = "#12000000"
 		android:fillViewport = "true"
 		app:layout_constraintBottom_toTopOf = "@id/activity_main_image"
@@ -28,10 +28,11 @@
 		android:id = "@+id/activity_main_image"
 		android:layout_width = "120dp"
 		android:layout_height = "0dp"
-		android:layout_marginBottom = "8dp"
+		android:layout_marginStart = "16dp"
+		android:layout_marginBottom = "16dp"
+		android:src = "#12000000"
 		app:layout_constraintBottom_toTopOf = "@id/activity_main_camera"
 		app:layout_constraintDimensionRatio = "1"
-		app:layout_constraintEnd_toEndOf = "parent"
 		app:layout_constraintStart_toStartOf = "parent" />
 
 	<CheckBox
@@ -40,7 +41,7 @@
 		android:layout_height = "wrap_content"
 		android:layout_marginStart = "16dp"
 		android:text = "@string/allow_camera"
-		app:layout_constraintBottom_toTopOf = "@id/activity_main_file_type_group"
+		app:layout_constraintBottom_toTopOf = "@id/activity_main_full_path"
 		app:layout_constraintStart_toStartOf = "parent" />
 
 	<CheckBox
@@ -51,6 +52,15 @@
 		android:text = "@string/multi_select"
 		app:layout_constraintStart_toEndOf = "@id/activity_main_camera"
 		app:layout_constraintTop_toTopOf = "@id/activity_main_camera" />
+
+	<CheckBox
+		android:id = "@+id/activity_main_full_path"
+		android:layout_width = "wrap_content"
+		android:layout_height = "wrap_content"
+		android:layout_marginStart = "16dp"
+		android:text = "@string/full_path"
+		app:layout_constraintBottom_toTopOf = "@id/activity_main_button"
+		app:layout_constraintStart_toStartOf = "parent" />
 
 	<com.google.android.material.textfield.TextInputLayout
 		android:id = "@+id/activity_main_max"
@@ -78,8 +88,9 @@
 		android:layout_height = "wrap_content"
 		android:layout_marginStart = "16dp"
 		android:orientation = "vertical"
-		app:layout_constraintBottom_toTopOf = "@id/activity_main_button"
-		app:layout_constraintStart_toStartOf = "parent">
+		app:layout_constraintBottom_toBottomOf = "@id/activity_main_image"
+		app:layout_constraintStart_toEndOf = "@id/activity_main_image"
+		app:layout_constraintTop_toTopOf = "@id/activity_main_image">
 
 		<RadioButton
 			android:id = "@+id/activity_main_file_type_all"

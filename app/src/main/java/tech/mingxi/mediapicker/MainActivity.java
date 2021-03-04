@@ -3,6 +3,7 @@ package tech.mingxi.mediapicker;
 import android.Manifest;
 import android.content.Intent;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.CheckBox;
@@ -25,6 +26,7 @@ public class MainActivity extends AppCompatActivity {
 	private TextView tv_selected;
 	private CheckBox cb_camera;
 	private CheckBox cb_multi_select;
+	private CheckBox cb_full_path;
 	private ImageView iv_first_image;
 	private RadioGroup radioGroup;
 	private TextInputLayout til_max;
@@ -38,6 +40,7 @@ public class MainActivity extends AppCompatActivity {
 		iv_first_image = findViewById(R.id.activity_main_image);
 		cb_camera = findViewById(R.id.activity_main_camera);
 		cb_multi_select = findViewById(R.id.activity_main_multi_select);
+		cb_full_path = findViewById(R.id.activity_main_full_path);
 		radioGroup = findViewById(R.id.activity_main_file_type_group);
 		til_max = findViewById(R.id.activity_main_max);
 		til_max.getEditText().setText(String.valueOf(MXMediaPicker.DEFAULT_MULTI_SELECT_MAX));
@@ -62,15 +65,25 @@ public class MainActivity extends AppCompatActivity {
 		findViewById(R.id.activity_main_button).setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				String[] permissions;
-				if (cb_camera.isChecked()) {
-					permissions = new String[]{Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.CAMERA};
+				String[] permissions = null;
+				if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+					if (cb_camera.isChecked()) {
+						permissions = new String[]{Manifest.permission.CAMERA};
+					} else {
+						goToPicker();
+						return;
+					}
 				} else {
-					permissions = new String[]{Manifest.permission.READ_EXTERNAL_STORAGE};
+					if (cb_camera.isChecked()) {
+						permissions = new String[]{Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.CAMERA};
+					} else {
+						permissions = new String[]{Manifest.permission.READ_EXTERNAL_STORAGE};
+					}
 				}
 				requestPermissions(permissions);
 			}
 		});
+		MXMediaPicker.init(getApplicationContext());
 	}
 
 	private void requestPermissions(String... permission) {
@@ -90,7 +103,6 @@ public class MainActivity extends AppCompatActivity {
 	}
 
 	private void goToPicker() {
-		MXMediaPicker.init(getApplicationContext());
 		MXMediaPicker picker = MXMediaPicker.getInstance();
 		//set your own custom holders. If not set, default holders will be used.
 //							picker.setFolderHolder(folderHolder);
@@ -100,6 +112,7 @@ public class MainActivity extends AppCompatActivity {
 		PickerConfig pickerConfig = new PickerConfig();
 		pickerConfig.setFileType(fileType);
 		pickerConfig.setAllowCamera(cb_camera.isChecked());
+		pickerConfig.setFolderMode(cb_full_path.isChecked() ? MXMediaPicker.FOLDER_MODE_FULL_PATH : MXMediaPicker.FOLDER_MODE_ONLY_PARENT);
 		pickerConfig.setMultiSelect(multiSelect);
 		if (multiSelect) {
 			try {
