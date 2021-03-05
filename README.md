@@ -3,6 +3,7 @@
 
 A media picker for Android (supports Android 11) with fully customizable UI~
 ### Try Demo
+![demo.gif](app/demo.gif)
 
 [demo.apk](app/demo.apk) 
 
