@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.view.Menu;
@@ -194,6 +195,9 @@ public class MediaPickerActivity extends AppCompatActivity {
 					"tech.mingxi.mediapicker.fileprovider",
 					file);
 			takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, fileUri);
+			if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.LOLLIPOP) {
+				takePictureIntent.addFlags(Intent.FLAG_GRANT_WRITE_URI_PERMISSION | Intent.FLAG_GRANT_READ_URI_PERMISSION);
+			}
 			startActivityForResult(takePictureIntent, REQ_CODE_CAMERA);
 		}
 	}
@@ -214,6 +218,9 @@ public class MediaPickerActivity extends AppCompatActivity {
 					"tech.mingxi.mediapicker.fileprovider",
 					file);
 			takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, fileUri);
+			if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.LOLLIPOP) {
+				takePictureIntent.addFlags(Intent.FLAG_GRANT_WRITE_URI_PERMISSION | Intent.FLAG_GRANT_READ_URI_PERMISSION);
+			}
 			startActivityForResult(takePictureIntent, REQ_CODE_CAMERA);
 		}
 	}

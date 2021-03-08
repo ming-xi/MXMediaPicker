@@ -1,4 +1,4 @@
-package tech.mingxi.mediapicker;
+package tech.mingxi.mediapicker.demo;
 
 import android.Manifest;
 import android.content.Intent;
@@ -17,6 +17,7 @@ import com.tbruyelle.rxpermissions3.RxPermissions;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import io.reactivex.rxjava3.functions.Consumer;
+import tech.mingxi.mediapicker.MXMediaPicker;
 import tech.mingxi.mediapicker.models.PickerConfig;
 
 public class MainActivity extends AppCompatActivity {
