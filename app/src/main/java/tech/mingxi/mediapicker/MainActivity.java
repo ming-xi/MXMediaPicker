@@ -64,12 +64,7 @@ public class MainActivity extends AppCompatActivity {
 		findViewById(R.id.activity_main_button).setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				String[] permissions = null;
-				if (cb_camera.isChecked()) {
-					permissions = new String[]{Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.CAMERA};
-				} else {
-					permissions = new String[]{Manifest.permission.READ_EXTERNAL_STORAGE};
-				}
+				String[] permissions = new String[]{Manifest.permission.READ_EXTERNAL_STORAGE};
 				requestPermissions(permissions);
 			}
 		});
