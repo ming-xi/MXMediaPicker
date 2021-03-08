@@ -192,7 +192,7 @@ public class MediaPickerActivity extends AppCompatActivity {
 		// Continue only if the File was successfully created
 		if (file != null) {
 			fileUri = FileProvider.getUriForFile(this,
-					"tech.mingxi.mediapicker.fileprovider",
+					getPackageName() + ".mxmediapicker.fileprovider",
 					file);
 			takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, fileUri);
 			if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.LOLLIPOP) {
@@ -215,7 +215,7 @@ public class MediaPickerActivity extends AppCompatActivity {
 		// Continue only if the File was successfully created
 		if (file != null) {
 			fileUri = FileProvider.getUriForFile(this,
-					"tech.mingxi.mediapicker.fileprovider",
+					getPackageName() + ".mxmediapicker.fileprovider",
 					file);
 			takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, fileUri);
 			if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.LOLLIPOP) {

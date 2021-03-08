@@ -8,7 +8,7 @@
 		<activity android:name = "tech.mingxi.mediapicker.ui.pages.MediaPickerActivity" />
 		<provider
 			android:name = "androidx.core.content.FileProvider"
-			android:authorities = "tech.mingxi.mediapicker.fileprovider"
+			android:authorities = "${applicationId}.mxmediapicker.fileprovider"
 			android:exported = "false"
 			android:grantUriPermissions = "true">
 			<meta-data
