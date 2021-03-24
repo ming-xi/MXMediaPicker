@@ -165,15 +165,19 @@ public class MediaPickerActivity extends AppCompatActivity {
 
 	private void setResultAndFinish() {
 		List<String> uris = new ArrayList<>();
+		List<String> paths = new ArrayList<>();
 		for (Item selectedItem : selectedItems) {
 			if (selectedItem instanceof ImageItem) {
 				uris.add(((ImageItem) selectedItem).getUri());
+				paths.add(((ImageItem) selectedItem).getPath());
 			} else if (selectedItem instanceof VideoItem) {
 				uris.add(((VideoItem) selectedItem).getUri());
+				paths.add(((VideoItem) selectedItem).getPath());
 			}
 		}
 		Intent data = new Intent();
 		data.putExtra(MXMediaPicker.KEY_SELECTED_URIS, uris.toArray(new String[0]));
+		data.putExtra(MXMediaPicker.KEY_SELECTED_PATHS, paths.toArray(new String[0]));
 		setResult(RESULT_OK, data);
 		finish();
 	}

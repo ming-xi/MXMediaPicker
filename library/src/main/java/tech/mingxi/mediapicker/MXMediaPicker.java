@@ -8,6 +8,7 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.provider.MediaStore;
 import android.util.Log;
+import android.webkit.MimeTypeMap;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -33,6 +34,7 @@ import tech.mingxi.mediapicker.models.FolderItem;
 import tech.mingxi.mediapicker.models.ImageItem;
 import tech.mingxi.mediapicker.models.Item;
 import tech.mingxi.mediapicker.models.PickerConfig;
+import tech.mingxi.mediapicker.models.ResultItem;
 import tech.mingxi.mediapicker.models.VideoItem;
 import tech.mingxi.mediapicker.ui.pages.MediaPickerActivity;
 
@@ -46,6 +48,7 @@ public class MXMediaPicker {
 	public static final int FILE_TYPE_IMAGE = 2;
 	public static final int DEFAULT_MULTI_SELECT_MAX = 9;
 	public static final String KEY_SELECTED_URIS = "KEY_SELECTED_URIS";
+	public static final String KEY_SELECTED_PATHS = "KEY_SELECTED_PATHS";
 	private static Context appContext;
 	private static final FolderHolder DEFAULT_FOLDER_HOLDER = new DefaultFolderHolder();
 	private static final ImageHolder DEFAULT_IMAGE_HOLDER = new DefaultImageHolder();
@@ -257,24 +260,23 @@ public class MXMediaPicker {
 		String[] projection = {
 				MediaStore.Video.VideoColumns._ID,
 				MediaStore.Video.VideoColumns.DATA,
-				MediaStore.Video.VideoColumns.DATE_TAKEN,
+				MediaStore.Video.VideoColumns.DATE_ADDED,
 				MediaStore.Video.VideoColumns.DURATION,
 
 		};
-		Cursor c = appContext.getContentResolver().query(uri, projection, null, null, MediaStore.Video.VideoColumns.DATE_TAKEN + " desc");
+		Cursor c = appContext.getContentResolver().query(uri, projection, null, null, MediaStore.Video.VideoColumns.DATE_ADDED + " desc");
 		if (c != null) {
 			while (c.moveToNext()) {
 				VideoItem item = new VideoItem();
 				item.setId(c.getLong(c.getColumnIndex(MediaStore.Video.VideoColumns._ID)));
 				item.setUri(ContentUris.withAppendedId(MediaStore.Video.Media.EXTERNAL_CONTENT_URI, c.getInt(c.getColumnIndex(MediaStore.Video.VideoColumns._ID))).toString());
 				item.setPath(c.getString(c.getColumnIndex(MediaStore.Video.VideoColumns.DATA)));
-				if (!item.getPath().contains(".")) {
-					continue;
+				if (item.getPath().contains(".")) {
+					String ext = item.getPath().substring(item.getPath().lastIndexOf(".")).replace(".", "").toLowerCase();
+					item.setExt(ext);
 				}
-				String ext = item.getPath().substring(item.getPath().lastIndexOf(".")).replace(".", "").toLowerCase();
-				item.setExt(ext);
 				item.setFolderPath(item.getPath().substring(0, item.getPath().lastIndexOf("/")));
-				item.setDate(c.getLong(c.getColumnIndex(MediaStore.Video.VideoColumns.DATE_TAKEN)));
+				item.setDate(c.getLong(c.getColumnIndex(MediaStore.Video.VideoColumns.DATE_ADDED)));
 				item.setDuration(c.getLong(c.getColumnIndex(MediaStore.Video.VideoColumns.DURATION)));
 				list.add(item);
 //				Log.i(TAG, "item=" + item);
@@ -289,27 +291,29 @@ public class MXMediaPicker {
 		String[] projection = {
 				MediaStore.Images.ImageColumns._ID,
 				MediaStore.Images.ImageColumns.DATA,
-				MediaStore.Images.ImageColumns.DATE_TAKEN,
-				MediaStore.Images.ImageColumns.DURATION,
+				MediaStore.Images.ImageColumns.DATE_ADDED,
 		};
 		List<String> allowedFormats = Arrays.asList("jpg", "jpeg", "png", "gif");
-		Cursor c = appContext.getContentResolver().query(uri, projection, null, null, MediaStore.Images.ImageColumns.DATE_TAKEN + " desc");
+		Cursor c = appContext.getContentResolver().query(uri, projection, null, null, MediaStore.Images.ImageColumns.DATE_ADDED + " desc");
 		if (c != null) {
 			while (c.moveToNext()) {
 				ImageItem item = new ImageItem();
 				item.setId(c.getLong(c.getColumnIndex(MediaStore.Images.ImageColumns._ID)));
 				item.setUri(ContentUris.withAppendedId(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, c.getInt(c.getColumnIndex(MediaStore.Images.ImageColumns._ID))).toString());
 				item.setPath(c.getString(c.getColumnIndex(MediaStore.Images.ImageColumns.DATA)));
-				if (!item.getPath().contains(".")) {
-					continue;
+				String ext;
+				if (item.getPath().contains(".")) {
+					ext = item.getPath().substring(item.getPath().lastIndexOf(".")).replace(".", "").toLowerCase();
+				} else {
+					MimeTypeMap mime = MimeTypeMap.getSingleton();
+					ext = mime.getExtensionFromMimeType(appContext.getContentResolver().getType(uri));
 				}
-				String ext = item.getPath().substring(item.getPath().lastIndexOf(".")).replace(".", "").toLowerCase();
 				if (!allowedFormats.contains(ext)) {
 					continue;
 				}
 				item.setExt(ext);
 				item.setFolderPath(item.getPath().substring(0, item.getPath().lastIndexOf("/")));
-				item.setDate(c.getLong(c.getColumnIndex(MediaStore.Images.ImageColumns.DATE_TAKEN)));
+				item.setDate(c.getLong(c.getColumnIndex(MediaStore.Images.ImageColumns.DATE_ADDED)));
 				list.add(item);
 //				Log.i(TAG, "item=" + item);
 			}
@@ -330,9 +334,18 @@ public class MXMediaPicker {
 		fragment.startActivityForResult(it, requestCode);
 	}
 
-	public String[] getSelectedUris(int resultCode, Intent data) {
+	public List<ResultItem> getSelectedItems(int resultCode, Intent data) {
 		if (resultCode == Activity.RESULT_OK) {
-			return data.getStringArrayExtra(KEY_SELECTED_URIS);
+			List<ResultItem> resultItems = new ArrayList<>();
+			String[] uris = data.getStringArrayExtra(KEY_SELECTED_URIS);
+			String[] paths = data.getStringArrayExtra(KEY_SELECTED_PATHS);
+			for (int i = 0; i < uris.length && i < paths.length; i++) {
+				ResultItem item = new ResultItem();
+				item.setUri(uris[i]);
+				item.setPath(paths[i]);
+				resultItems.add(item);
+			}
+			return resultItems;
 		} else {
 			return null;
 		}

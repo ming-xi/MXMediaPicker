@@ -14,11 +14,14 @@ import android.widget.TextView;
 import com.google.android.material.textfield.TextInputLayout;
 import com.tbruyelle.rxpermissions3.RxPermissions;
 
+import java.util.List;
+
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import io.reactivex.rxjava3.functions.Consumer;
 import tech.mingxi.mediapicker.MXMediaPicker;
 import tech.mingxi.mediapicker.models.PickerConfig;
+import tech.mingxi.mediapicker.models.ResultItem;
 
 public class MainActivity extends AppCompatActivity {
 	private static final String TAG = MainActivity.class.getSimpleName();
@@ -118,15 +121,15 @@ public class MainActivity extends AppCompatActivity {
 	protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
 		super.onActivityResult(requestCode, resultCode, data);
 		if (requestCode == REQ_CODE) {
-			String[] selectedUris = MXMediaPicker.getInstance().getSelectedUris(resultCode, data);
-			if (selectedUris != null) {
+			List<ResultItem> selectedItems = MXMediaPicker.getInstance().getSelectedItems(resultCode, data);
+			if (selectedItems != null) {
 				StringBuilder sb = new StringBuilder();
-				for (String uri : selectedUris) {
-					sb.append(uri).append("\n");
+				for (ResultItem item : selectedItems) {
+					sb.append(item.getUri()).append("\n(").append(item.getPath()).append(")").append("\n");
 				}
-				tv_selected.setText(String.format("selected uris:\n%s", sb.toString()));
-				if (selectedUris.length > 0) {
-					iv_first_image.setImageURI(Uri.parse(selectedUris[0]));
+				tv_selected.setText(String.format("selected items:\n%s", sb.toString()));
+				if (selectedItems.size() > 0) {
+					iv_first_image.setImageURI(Uri.parse(selectedItems.get(0).getUri()));
 				}
 			}
 		}
