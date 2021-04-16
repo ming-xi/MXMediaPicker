@@ -3,9 +3,10 @@
 	package = "tech.mingxi.mediapicker">
 
 	<uses-permission android:name = "android.permission.READ_EXTERNAL_STORAGE" />
-
-	<application android:theme = "@style/MediaPicker">
-		<activity android:name = "tech.mingxi.mediapicker.ui.pages.MediaPickerActivity" />
+	<application>
+		<activity
+			android:name = "tech.mingxi.mediapicker.ui.pages.MediaPickerActivity"
+			android:theme = "@style/MediaPicker" />
 		<provider
 			android:name = ".MXFileProvider"
 			android:authorities = "${applicationId}.mxmediapicker.fileprovider"
