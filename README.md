@@ -12,17 +12,17 @@ A media picker for Android (supports Android 11) with fully customizable UI~
 
 Step 1. Add it in your root build.gradle at the end of repositories:
 
-	allprojects {
-		repositories {
-			...
-			maven { url 'https://jitpack.io' }
-		}
-	}
+    allprojects {
+        repositories {
+            ...
+            maven { url 'https://jitpack.io' }
+        }
+    }
 Step 2. Add the dependency
 
-	dependencies {
-		implementation 'com.github.ming-xi:MXMediaPicker:1.0.7'
-	}
+    dependencies {
+        implementation 'com.github.ming-xi:MXMediaPicker:1.0.8'
+    }
 
 
 
@@ -58,20 +58,20 @@ picker.chooseImage(MainActivity.this, REQ_CODE);
 - And receive results in:
 ```
 @Override
-	protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-		super.onActivityResult(requestCode, resultCode, data);
-		if (requestCode == REQ_CODE) {
-			List<ResultItem> selectedItems = MXMediaPicker.getInstance().getSelectedItems(resultCode, data);
-            	if (selectedItems != null) {
-				    for (ResultItem item : selectedItems) {
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == REQ_CODE) {
+            List<ResultItem> selectedItems = MXMediaPicker.getInstance().getSelectedItems(resultCode, data);
+                if (selectedItems != null) {
+                    for (ResultItem item : selectedItems) {
                         String uri = item.getUri();
                         String path = item.getPath();
-                    	//Please read data from uri. Path is only used to get file name and extension. 
+                        //Please read data from uri. Path is only used to get file name and extension. 
                     }                                        
                 }
-			}
-		}
-	}
+            }
+        }
+    }
 ```
 
 

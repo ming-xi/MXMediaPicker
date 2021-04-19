@@ -37,6 +37,7 @@ import tech.mingxi.mediapicker.ui.controllers.ItemAdapter;
 public class MediaPickerActivity extends AppCompatActivity {
 	private static final String TAG = MediaPickerActivity.class.getSimpleName();
 	private static final int REQ_CODE_CAMERA = 1;
+	private static final int REQ_CODE_RECORDER = 2;
 	public static final String KEY_FOLDER_MODE = "KEY_FOLDER_MODE";
 	public static final String KEY_FILE_TYPE = "KEY_FILE_TYPE";
 	public static final String KEY_MULTI_SELECT = "KEY_MULTI_SELECT";
@@ -55,7 +56,9 @@ public class MediaPickerActivity extends AppCompatActivity {
 	private Stack<FolderItem> stack = new Stack<>();
 	private List<Item> selectedItems = new ArrayList<>();
 	private FolderItem root;
+	//for camera to write file
 	private Uri fileUri;
+	private String filePath;
 
 	@Override
 	protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -195,6 +198,7 @@ public class MediaPickerActivity extends AppCompatActivity {
 		}
 		// Continue only if the File was successfully created
 		if (file != null) {
+			filePath = file.getAbsolutePath();
 			fileUri = FileProvider.getUriForFile(this,
 					getPackageName() + ".mxmediapicker.fileprovider",
 					file);
@@ -202,7 +206,7 @@ public class MediaPickerActivity extends AppCompatActivity {
 			if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.LOLLIPOP) {
 				takePictureIntent.addFlags(Intent.FLAG_GRANT_WRITE_URI_PERMISSION | Intent.FLAG_GRANT_READ_URI_PERMISSION);
 			}
-			startActivityForResult(takePictureIntent, REQ_CODE_CAMERA);
+			startActivityForResult(takePictureIntent, REQ_CODE_RECORDER);
 		}
 	}
 
@@ -218,6 +222,7 @@ public class MediaPickerActivity extends AppCompatActivity {
 		}
 		// Continue only if the File was successfully created
 		if (file != null) {
+			filePath = file.getAbsolutePath();
 			fileUri = FileProvider.getUriForFile(this,
 					getPackageName() + ".mxmediapicker.fileprovider",
 					file);
@@ -234,11 +239,10 @@ public class MediaPickerActivity extends AppCompatActivity {
 		String imageFileName = "JPEG_" + timeStamp + "_";
 		File storageDir = getFilesDir();
 		File image = File.createTempFile(
-				imageFileName,  /* prefix */
-				".jpg",         /* suffix */
-				storageDir      /* directory */
+				imageFileName,
+				".jpg",
+				storageDir
 		);
-		// Save a file: path for use with ACTION_VIEW intents
 		return image;
 	}
 
@@ -247,11 +251,10 @@ public class MediaPickerActivity extends AppCompatActivity {
 		String imageFileName = "MP4" + timeStamp + "_";
 		File storageDir = getFilesDir();
 		File image = File.createTempFile(
-				imageFileName,  /* prefix */
-				".mp4",         /* suffix */
-				storageDir      /* directory */
+				imageFileName,
+				".mp4",
+				storageDir
 		);
-		// Save a file: path for use with ACTION_VIEW intents
 		return image;
 	}
 
@@ -261,7 +264,14 @@ public class MediaPickerActivity extends AppCompatActivity {
 		if (requestCode == REQ_CODE_CAMERA && resultCode == RESULT_OK) {
 			ImageItem imageItem = new ImageItem();
 			imageItem.setUri(fileUri.toString());
+			imageItem.setPath(filePath);
 			selectedItems.add(imageItem);
+			setResultAndFinish();
+		} else if (requestCode == REQ_CODE_RECORDER && resultCode == RESULT_OK) {
+			VideoItem videoItem = new VideoItem();
+			videoItem.setUri(fileUri.toString());
+			videoItem.setPath(filePath);
+			selectedItems.add(videoItem);
 			setResultAndFinish();
 		}
 	}
