@@ -125,6 +125,7 @@ public class MainActivity extends AppCompatActivity {
 			if (selectedItems != null) {
 				StringBuilder sb = new StringBuilder();
 				for (ResultItem item : selectedItems) {
+					//The path is used for filename(and extension) information only. Don't use this path to read file! Use uri instead
 					sb.append(item.getUri()).append("\n(").append(item.getPath()).append(")").append("\n");
 				}
 				tv_selected.setText(String.format("selected items:\n%s", sb.toString()));
